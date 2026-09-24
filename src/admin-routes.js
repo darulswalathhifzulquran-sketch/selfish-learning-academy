@@ -45,7 +45,7 @@ router.post('/admin/auth/logout', async (req, res, next) => { try {
 router.route('/admin/requests')
 .get(async (req, res, next) => { try {
   if (!await requireAdmin(req, res)) return;
-  const docs = await col('requests').find({}, { projection: { _id: 0 } }).sort({ created_at: -1 }).limit(500).toArray();
+  const docs = await col('requests').find({}, { projection: { _id:0,price:0,payment_ref:0,payment_status:0 } }).sort({ created_at:-1 }).limit(500).toArray();
   res.json({ requests: docs });
 } catch (e) { next(e); } })
 .put(async (req, res, next) => { try {
@@ -58,31 +58,23 @@ router.route('/admin/requests')
 
   const set = { updated_at: new Date() };
   if (b.status != null) set.status = String(b.status).slice(0, 80);
-  if (b.price !== '' && b.price != null && Number.isFinite(Number(b.price))) set.price = Number(b.price);
   if (b.deliveryText != null) set.delivery_text = String(b.deliveryText).slice(0, 200);
-  if (b.paymentStatus != null) set.payment_status = String(b.paymentStatus).slice(0, 50);
   if (typeof b.accessGranted === 'boolean') set.access_granted = b.accessGranted;
   if (b.progress != null && Number.isFinite(Number(b.progress))) set.progress = Math.max(0, Math.min(100, Number(b.progress)));
 
-  await col('requests').updateOne({ request_id: requestId }, { $set: set });
+  await col('requests').updateOne({ request_id: requestId }, { $set: set, $unset:{ price:'',payment_ref:'',payment_status:'' } });
   const current = await col('requests').findOne({ request_id: requestId });
   let note = null;
   if (current.access_granted && !previous.access_granted) {
     note = ['Learning access granted', `Your materials for ${requestId} are ready. Open your Learning Library to start.`, 'ready'];
-  } else if (current.payment_status === 'Verified' && previous.payment_status !== 'Verified') {
-    note = ['Payment verified', `Your payment for ${requestId} has been verified. We are preparing your materials.`, 'payment'];
   } else if (current.status !== previous.status) {
     note = ['Request updated', `${requestId} status is now “${current.status}”.`, 'status'];
-  } else if ((current.price != null && String(current.price) !== String(previous.price ?? '')) || (current.delivery_text || '') !== (previous.delivery_text || '')) {
-    note = ['Quotation updated', `A quotation update is available for ${requestId}. Check My Requests for price and delivery details.`, 'quotation'];
+  } else if ((current.delivery_text || '') !== (previous.delivery_text || '')) {
+    note = ['Preparation update', `A preparation or delivery-time update is available for ${requestId}.`, 'status'];
   }
   if (note) await notify(previous.user_id, ...note);
 
-  res.json({ request: {
-    request_id: current.request_id, status: current.status, price: current.price,
-    delivery_text: current.delivery_text, payment_status: current.payment_status,
-    access_granted: current.access_granted, progress: current.progress
-  } });
+  res.json({ request:{ request_id:current.request_id,status:current.status,delivery_text:current.delivery_text,access_granted:current.access_granted,progress:current.progress } });
 } catch (e) { next(e); } });
 
 router.route('/admin/materials')
