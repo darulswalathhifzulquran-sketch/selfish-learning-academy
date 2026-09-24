@@ -1,12 +1,84 @@
-/* SELFISH LEARNING ACADEMY - Premium logo + light theme fixes */
-.logo{max-width:220px}
-.logo img,.logo svg{width:auto;height:auto;max-width:150px;object-fit:contain}
-.monogram{flex-shrink:0}
-.wordmark{max-width:150px}
-:root{--ink:#123d34;--muted:#52665f}
-.card,.programme,.hero-card,.table-card,.stat{color:var(--ink)}
-.card h1,.card h2,.card h3,.card h4,.programme h3,.stat strong,.uni-name{color:#123d34}
-.card p,.programme p,.section p,.uni-name span,.muted{color:#52665f}
-.badge,.pill{color:#146a50}
-input,textarea,select{color:#123d34}
-@media(max-width:850px){.nav{min-height:70px;gap:12px}.logo{max-width:170px;gap:8px}.monogram{width:38px;height:34px;font-size:14px}.wordmark{font-size:.82rem}.wordmark small{font-size:.48rem}}
+/* SELFISH LEARNING ACADEMY - Final premium fixes */
+
+/* LOGO */
+.logo{
+  max-width:210px !important;
+  flex-shrink:0;
+}
+.logo img,
+.logo svg{
+  width:auto !important;
+  height:42px !important;
+  max-width:140px !important;
+  object-fit:contain !important;
+  display:block;
+}
+.wordmark{
+  max-width:145px;
+}
+
+/* LIGHT THEME TEXT CONTRAST */
+:root{
+  --ink:#123d34;
+  --muted:#52665f;
+}
+
+/* headings */
+.section h1,
+.section h2,
+.section h3,
+.card h1,
+.card h2,
+.card h3,
+.uni-name,
+.uni-name span{
+  opacity:1 !important;
+  color:#123d34 !important;
+}
+
+/* descriptions */
+.card p,
+.programme p,
+.uni-name span,
+.university-strip p,
+.muted,
+.section p{
+  opacity:1 !important;
+  color:#52665f !important;
+}
+
+/* university cards */
+.university-strip .card,
+.card{
+  background:#ffffff !important;
+}
+
+.badge,
+.pill{
+  opacity:1 !important;
+  color:#146a50 !important;
+}
+
+input,textarea,select{
+  color:#123d34 !important;
+}
+
+/* MOBILE */
+@media(max-width:850px){
+ .nav{
+   min-height:70px !important;
+   padding:0 18px;
+ }
+ .logo{
+   max-width:160px !important;
+ }
+ .logo img,
+ .logo svg{
+   height:34px !important;
+   max-width:120px !important;
+ }
+ .monogram{
+   width:38px;
+   height:34px;
+ }
+}
