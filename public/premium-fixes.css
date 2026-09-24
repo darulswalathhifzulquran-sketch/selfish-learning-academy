@@ -1,84 +1,86 @@
-/* SELFISH LEARNING ACADEMY - Final premium fixes */
+/* SELFISH LEARNING ACADEMY - Header + Light Theme final override */
 
-/* LOGO */
+/* REAL HEADER LOGO FIX */
+header .logo,
+.nav .logo,
 .logo{
-  max-width:210px !important;
-  flex-shrink:0;
+  width:auto !important;
+  max-width:180px !important;
+  height:52px !important;
+  overflow:hidden !important;
+  flex-shrink:0 !important;
 }
+
+header .logo img,
+.nav .logo img,
 .logo img,
+.logo picture img,
 .logo svg{
   width:auto !important;
-  height:42px !important;
-  max-width:140px !important;
+  height:48px !important;
+  max-width:130px !important;
   object-fit:contain !important;
-  display:block;
-}
-.wordmark{
-  max-width:145px;
+  object-position:center !important;
+  display:block !important;
 }
 
-/* LIGHT THEME TEXT CONTRAST */
-:root{
-  --ink:#123d34;
-  --muted:#52665f;
+/* Remove white oversized logo box */
+header .logo img{
+  border-radius:12px;
 }
 
-/* headings */
-.section h1,
-.section h2,
-.section h3,
-.card h1,
-.card h2,
-.card h3,
-.uni-name,
-.uni-name span{
-  opacity:1 !important;
-  color:#123d34 !important;
+/* LIGHT THEME FORCE READABILITY */
+html:not(.dark) body,
+body:not(.dark){
+  --ink:#123d34 !important;
+  --muted:#52665f !important;
 }
 
-/* descriptions */
-.card p,
-.programme p,
-.uni-name span,
-.university-strip p,
-.muted,
-.section p{
-  opacity:1 !important;
-  color:#52665f !important;
+body:not(.dark) h1,
+body:not(.dark) h2,
+body:not(.dark) h3,
+body:not(.dark) h4,
+body:not(.dark) .uni-name,
+body:not(.dark) .programme h3,
+body:not(.dark) .card h3{
+ opacity:1 !important;
+ color:#123d34 !important;
 }
 
-/* university cards */
+body:not(.dark) p,
+body:not(.dark) .uni-name span,
+body:not(.dark) .programme p,
+body:not(.dark) .card p{
+ opacity:1 !important;
+ color:#52665f !important;
+}
+
+/* University cards */
 .university-strip .card,
+.university-card,
 .card{
-  background:#ffffff !important;
+ background:#fff !important;
 }
 
-.badge,
-.pill{
-  opacity:1 !important;
-  color:#146a50 !important;
-}
-
-input,textarea,select{
-  color:#123d34 !important;
+.university-strip *,
+.card *{
+ text-shadow:none !important;
 }
 
 /* MOBILE */
 @media(max-width:850px){
- .nav{
-   min-height:70px !important;
-   padding:0 18px;
- }
+ header .logo,
+ .nav .logo,
  .logo{
-   max-width:160px !important;
+   max-width:145px !important;
+   height:42px !important;
  }
+
+ header .logo img,
+ .nav .logo img,
  .logo img,
  .logo svg{
-   height:34px !important;
-   max-width:120px !important;
- }
- .monogram{
-   width:38px;
-   height:34px;
+   height:36px !important;
+   max-width:105px !important;
  }
 }
