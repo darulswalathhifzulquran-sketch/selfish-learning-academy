@@ -26,13 +26,13 @@ function movingFeatureMenu(){
  const links=qa(':scope > a',inner);if(!links.length)return;
  inner.dataset.tickerReady='1';
  const track=document.createElement('div');track.className='feature-track';
- const addSet=(clone=false)=>links.forEach((a,i)=>{const n=clone?a.cloneNode(true):a;if(clone){n.setAttribute('aria-hidden','true');n.tabIndex=-1}track.appendChild(n);const sep=document.createElement('span');sep.className='ticker-sep';sep.setAttribute('aria-hidden','true');track.appendChild(sep)});
+ const addSet=(clone=false)=>links.forEach(a=>{const n=clone?a.cloneNode(true):a;if(clone){n.setAttribute('aria-hidden','true');n.tabIndex=-1}track.appendChild(n);const sep=document.createElement('span');sep.className='ticker-sep';sep.setAttribute('aria-hidden','true');track.appendChild(sep)});
  addSet(false);addSet(true);inner.replaceChildren(track);
 }
 
 function removeLanguageChoice(){
  if(path()!=='/register')return;const lang=q('#language');if(!lang||lang.type==='hidden')return;
- const field=lang.closest('.field');if(field){field.innerHTML='<input id="language" type="hidden" value="English">'}
+ const field=lang.closest('.field');if(field)field.innerHTML='<input id="language" type="hidden" value="English">';
 }
 
 function replaceExactText(root,from,to){
@@ -51,9 +51,7 @@ function paymentCleanup(){
  const suc=q('.success-notify p');if(suc)suc.textContent='We’ll send an in-app notification when your request is reviewed or your learning materials are ready.';
  const notifHead=q('.workspace-top p');if(path()==='/notifications'&&notifHead)notifHead.textContent='Request, material and access updates appear here.';
  qa('.notification-item').forEach(el=>{if(/payment|quotation|price/i.test(el.textContent))el.classList.add('payment-ui-hidden')});
- qa('.card p,.reading p').forEach(p=>{
-  if(/sends a quotation, verifies payment/i.test(p.textContent))p.textContent='You request specific materials, the admin reviews the requirement, prepares the learning resources and grants access when they are ready.';
- });
+ qa('.card p,.reading p').forEach(p=>{if(/sends a quotation, verifies payment/i.test(p.textContent))p.textContent='You request specific materials, the admin reviews the requirement, prepares the learning resources and grants access when they are ready.'});
  replaceExactText(document.body,'quotation, payment verification or learning materials','request review or learning materials');
  replaceExactText(document.body,'quotation or learning materials','request review or learning materials');
 }
@@ -65,7 +63,7 @@ function thoughtFix(){
  qa('.sample-thoughts').forEach(el=>el.outerHTML=previewThoughtMarkup());
  qa('.thought-empty').forEach(el=>el.outerHTML=previewThoughtMarkup());
  qa('.sample-note').forEach(el=>el.remove());
- qa('*').forEach(el=>{if(el.children.length===0&&/Hafiz Rinshad/.test(el.textContent))el.textContent=el.textContent.replace(/Hafiz Rinshad/g,'Amjed')});
+ qa('.sample-person strong').forEach(el=>{if(/Hafiz Rinshad/.test(el.textContent))el.textContent='Amjed'});
 }
 
 async function idCardFix(){
@@ -78,13 +76,14 @@ async function idCardFix(){
   idName.addEventListener('input',()=>{const v=q('#idNamePreview');if(v)v.textContent=idName.value.trim()||'Student'});
   form.addEventListener('submit',()=>{const value=idName.value.trim();fetch('/api/student/id-card',{method:'PUT',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({idName:value})}).catch(()=>{})});
  }
- qa('.id-username').forEach(x=>x.remove());
+ const main=q('.id-main');
+ if(main){const legacy=q('.id-username',main);if(legacy){legacy.id='idNamePreview';legacy.classList.add('id-idname');legacy.textContent=idName?.value.trim()||q('h2',main)?.textContent||'Student'}}
  if(idFetch)return;idFetch=true;
  try{
   const r=await fetch('/api/student/id-card',{credentials:'include'});if(!r.ok)return;const d=await r.json(),s=d.student||{};
   if(idName&&!idName.value)idName.value=s.id_name||s.full_name||'';
-  const main=q('.id-main');if(main){
-   let nm=q('#idNamePreview',main);if(!nm){nm=document.createElement('div');nm.id='idNamePreview';nm.className='id-idname';main.appendChild(nm)}nm.textContent=s.id_name||s.full_name||'Student';
+  if(main){
+   let nm=q('#idNamePreview',main);if(!nm){nm=document.createElement('div');nm.id='idNamePreview';nm.className='id-username id-idname';main.appendChild(nm)}nm.textContent=s.id_name||s.full_name||'Student';
    let code=q('#selfishCodePreview',main);if(!code){code=document.createElement('div');code.id='selfishCodePreview';code.className='id-selfish-code';main.appendChild(code)}code.innerHTML='SELFISH CODE · <b>'+String(s.selfish_code||'').replace(/[<>&]/g,'')+'</b>';
    const old=q('.id-number',main);if(old){old.textContent='Academy ID · '+(s.enrollment_id||'');old.style.fontSize='.7rem';old.style.opacity='.72'}
   }
