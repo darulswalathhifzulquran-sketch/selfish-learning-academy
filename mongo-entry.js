@@ -3,7 +3,7 @@ import cookieParser from 'cookie-parser';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readFile } from 'node:fs/promises';
-import { initMongo, migratePostgresOnce, db } from './src/mongo.js';
+import { initMongo, migratePostgresOnce } from './src/mongo.js';
 import enhancementRoutes from './src/enhancement-routes.js';
 import studentRoutes from './src/student-routes.js';
 import adminRoutes from './src/admin-routes.js';
@@ -18,14 +18,7 @@ app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.get('/health', async (_req, res) => {
-  try {
-    await db().command({ ping: 1 });
-    res.json({ ok: true, database: 'MongoDB Atlas' });
-  } catch {
-    res.status(503).json({ ok: false });
-  }
-});
+app.get('/health', (_req, res) => res.json({ ok: true, service: 'SELFISH LEARNING ACADEMY', database: 'MongoDB Atlas' }));
 
 app.use('/api', enhancementRoutes);
 app.use('/api', studentRoutes);
