@@ -24,22 +24,24 @@ app.use('/api', enhancementRoutes);
 app.use('/api', studentRoutes);
 app.use('/api', adminRoutes);
 
-async function renderEnhancedHtml(fileName, cssHref, jsSrc) {
+async function renderEnhancedHtml(fileName, cssHrefs = [], jsSrcs = []) {
   let html = await readFile(path.join(publicDir, fileName), 'utf8');
-  if (cssHref && !html.includes(cssHref)) html = html.replace('</head>', `<link rel="stylesheet" href="${cssHref}"></head>`);
-  if (jsSrc && !html.includes(jsSrc)) html = html.replace('</body>', `<script src="${jsSrc}" defer></script></body>`);
+  const cssList = Array.isArray(cssHrefs) ? cssHrefs : [cssHrefs].filter(Boolean);
+  const jsList = Array.isArray(jsSrcs) ? jsSrcs : [jsSrcs].filter(Boolean);
+  for (const href of cssList) if (href && !html.includes(href)) html = html.replace('</head>', `<link rel="stylesheet" href="${href}"></head>`);
+  for (const src of jsList) if (src && !html.includes(src)) html = html.replace('</body>', `<script src="${src}" defer></script></body>`);
   return html;
 }
 
 app.get(['/', '/index.html'], async (_req, res, next) => {
   try {
-    res.type('html').send(await renderEnhancedHtml('index.html', '/pro-enhance.css', '/pro-enhance.js'));
+    res.type('html').send(await renderEnhancedHtml('index.html', ['/pro-enhance.css','/site-fixes.css'], ['/pro-enhance.js','/site-fixes.js']));
   } catch (e) { next(e); }
 });
 
 app.get('/admin.html', async (_req, res, next) => {
   try {
-    res.type('html').send(await renderEnhancedHtml('admin.html', '/admin-enhance.css', '/admin-enhance.js'));
+    res.type('html').send(await renderEnhancedHtml('admin.html', ['/admin-enhance.css'], ['/admin-enhance.js','/admin-fixes.js']));
   } catch (e) { next(e); }
 });
 
@@ -47,7 +49,7 @@ app.use(express.static(publicDir));
 app.get('*', async (req, res, next) => {
   if (req.path.startsWith('/api/')) return res.status(404).json({ error: 'Not found' });
   try {
-    res.type('html').send(await renderEnhancedHtml('index.html', '/pro-enhance.css', '/pro-enhance.js'));
+    res.type('html').send(await renderEnhancedHtml('index.html', ['/pro-enhance.css','/site-fixes.css'], ['/pro-enhance.js','/site-fixes.js']));
   } catch (e) { next(e); }
 });
 
