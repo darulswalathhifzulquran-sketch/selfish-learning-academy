@@ -1,86 +1,109 @@
-/* SELFISH LEARNING ACADEMY - Header + Light Theme final override */
+/* SELFISH LEARNING ACADEMY - Premium UI fixes */
 
-/* REAL HEADER LOGO FIX */
+/* Universal header/logo correction */
+header,
+.nav,
+nav{
+  align-items:center !important;
+}
+
 header .logo,
 .nav .logo,
-.logo{
+.logo,
+a.logo{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
   width:auto !important;
-  max-width:180px !important;
-  height:52px !important;
+  min-width:0 !important;
+  max-width:150px !important;
+  height:46px !important;
+  padding:0 !important;
+  margin:0 !important;
   overflow:hidden !important;
-  flex-shrink:0 !important;
+  flex:0 0 auto !important;
 }
 
 header .logo img,
 .nav .logo img,
 .logo img,
+.logo picture,
 .logo picture img,
-.logo svg{
+.logo svg,
+a.logo svg{
+  display:block !important;
   width:auto !important;
-  height:48px !important;
-  max-width:130px !important;
+  height:40px !important;
+  max-width:120px !important;
   object-fit:contain !important;
   object-position:center !important;
-  display:block !important;
+  transform:none !important;
 }
 
-/* Remove white oversized logo box */
-header .logo img{
-  border-radius:12px;
+/* remove old image stretching */
+img{
+  object-fit:contain;
 }
 
-/* LIGHT THEME FORCE READABILITY */
-html:not(.dark) body,
-body:not(.dark){
+/* Header spacing */
+header,.nav{
+  padding-top:10px !important;
+  padding-bottom:10px !important;
+}
+
+/* Light mode readability */
+body:not(.dark),html:not(.dark) body{
   --ink:#123d34 !important;
-  --muted:#52665f !important;
+  --muted:#536861 !important;
 }
 
 body:not(.dark) h1,
 body:not(.dark) h2,
 body:not(.dark) h3,
 body:not(.dark) h4,
-body:not(.dark) .uni-name,
-body:not(.dark) .programme h3,
-body:not(.dark) .card h3{
- opacity:1 !important;
+body:not(.dark) h5{
  color:#123d34 !important;
+ opacity:1 !important;
 }
 
 body:not(.dark) p,
-body:not(.dark) .uni-name span,
-body:not(.dark) .programme p,
-body:not(.dark) .card p{
+body:not(.dark) span,
+body:not(.dark) li{
  opacity:1 !important;
- color:#52665f !important;
 }
 
-/* University cards */
-.university-strip .card,
+.card,
 .university-card,
-.card{
- background:#fff !important;
+.programme,
+.university-strip .card{
+ background:#ffffff !important;
 }
 
-.university-strip *,
-.card *{
+.card *,
+.university-card *{
  text-shadow:none !important;
 }
 
-/* MOBILE */
 @media(max-width:850px){
  header .logo,
  .nav .logo,
- .logo{
-   max-width:145px !important;
-   height:42px !important;
+ .logo,
+ a.logo{
+   max-width:120px !important;
+   height:38px !important;
  }
 
  header .logo img,
  .nav .logo img,
  .logo img,
- .logo svg{
-   height:36px !important;
-   max-width:105px !important;
+ .logo svg,
+ a.logo svg{
+   height:32px !important;
+   max-width:95px !important;
+ }
+
+ header,.nav{
+   padding-top:8px !important;
+   padding-bottom:8px !important;
  }
 }
